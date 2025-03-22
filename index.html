@@ -17,6 +17,7 @@
       --button-hover: #4169E1;
       --forecast-bg: rgba(255, 255, 255, 0.8);
       --vibe-color: #0288d1;
+      --vibe-bg: rgba(2, 136, 209, 0.1);
       --share-bg: #f06292;
       --share-hover: #ec407a;
       --upload-bg: #4caf50;
@@ -31,6 +32,7 @@
       --button-hover: #29b6f6;
       --forecast-bg: rgba(55, 71, 79, 0.8);
       --vibe-color: #4fc3f7;
+      --vibe-bg: rgba(79, 195, 247, 0.1);
       --share-bg: #f06292;
       --share-hover: #ec407a;
       --upload-bg: #66bb6a;
@@ -110,7 +112,7 @@
       flex: 1;
     }
 
-    .add-location, .settings, .theme-toggle {
+    .add-location, .settings {
       background: var(--primary-color);
       color: white;
       border-radius: 50%;
@@ -123,15 +125,7 @@
       transition: transform 0.3s;
     }
 
-    .theme-toggle {
-      background: none;
-      color: var(--text-color);
-      position: absolute;
-      top: -50px;
-      right: 0;
-    }
-
-    .add-location:hover, .settings:hover, .theme-toggle:hover {
+    .add-location:hover, .settings:hover {
       transform: scale(1.1);
     }
 
@@ -153,6 +147,10 @@
       font-weight: bold;
       color: var(--text-color);
       animation: fadeIn 0.5s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
 
     .condition {
@@ -166,11 +164,38 @@
       font-weight: bold;
       color: var(--vibe-color);
       margin: 10px 0;
+      background: var(--vibe-bg);
+      padding: 10px;
+      border-radius: 8px;
+      display: inline-block;
     }
 
     .timestamp {
       font-size: 14px;
       color: #777;
+    }
+
+    .location-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .location-buttons button {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .location-buttons button:hover {
+      background: var(--button-hover);
     }
 
     .share-button {
@@ -295,7 +320,7 @@
       transform: scale(1.05);
     }
 
-    /* Modal */
+    /* Modal (Add Location & Settings) */
     .modal {
       display: none;
       position: fixed;
@@ -313,8 +338,132 @@
       background: var(--card-bg);
       padding: 20px;
       border-radius: 10px;
-      width: 300px;
+      width: 350px;
       animation: popUp 0.3s;
+    }
+
+    .modal-content h2 {
+      margin-bottom: 20px;
+      color: var(--primary-color);
+    }
+
+    .modal-content button {
+      margin: 10px 5px;
+      padding: 10px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .modal-content button:hover {
+      background: var(--button-hover);
+    }
+
+    /* Enhanced Add Location Modal */
+    .location-input {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .location-input input {
+      width: 100%;
+      padding: 12px 40px 12px 12px;
+      border: 1px solid #b0bec5;
+      border-radius: 8px;
+      font-size: 16px;
+      background: var(--card-bg);
+      color: var(--text-color);
+    }
+
+    .location-input .material-icons {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-color);
+    }
+
+    .suggestions {
+      max-height: 150px;
+      overflow-y: auto;
+      border: 1px solid #b0bec5;
+      border-radius: 8px;
+      background: var(--card-bg);
+    }
+
+    .suggestion-item {
+      padding: 10px;
+      cursor: pointer;
+      color: var(--text-color);
+      transition: background 0.3s;
+    }
+
+    .suggestion-item:hover {
+      background: var(--vibe-bg);
+    }
+
+    .settings-item {
+      margin: 15px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .settings-item label {
+      color: var(--text-color);
+    }
+
+    .settings-item p {
+      color: var(--text-color);
+      font-size: 14px;
+    }
+
+    /* Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary-color);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
     }
 
     @keyframes popUp {
@@ -359,17 +508,13 @@
 <body>
   <div id="particles-js"></div>
   <div class="container swipe-container">
-    <button class="theme-toggle" onclick="toggleTheme()">
-      <span class="material-icons" id="theme-icon">light_mode</span>
-    </button>
-
     <!-- Header Section -->
     <div class="header">
-      <div class="add-location" onclick="openModal()">
+      <div class="add-location" onclick="openModal('add-location-modal')">
         <span class="material-icons">add</span>
       </div>
       <div class="city-name" id="city-name">Siddipet</div>
-      <div class="settings" onclick="alert('Settings coming soon!')">
+      <div class="settings" onclick="openModal('settings-modal')">
         <span class="material-icons">settings</span>
       </div>
     </div>
@@ -377,10 +522,17 @@
 
     <!-- Main Temperature Display -->
     <div class="temp-display">
-      <div class="temperature" id="temperature">28°C</div>
+      <div class="temperature" id="temperature">
+        <span class="material-icons" id="weather-icon">wb_sunny</span> 28°C
+      </div>
       <div class="condition" id="condition">Clear</div>
       <div class="vibe" id="vibe">Sunny + Warm = Beach Picnic Vibes</div>
       <div class="timestamp" id="timestamp">As of 4:15 PM</div>
+      <div class="location-buttons">
+        <button onclick="getWeatherByLocation()">
+          <span class="material-icons">my_location</span> Use My Location
+        </button>
+      </div>
       <button class="share-button" id="share-button" onclick="shareMood()">
         <span class="material-icons">share</span> Share
       </button>
@@ -413,9 +565,45 @@
   <div class="modal" id="add-location-modal">
     <div class="modal-content">
       <h2>Add Location</h2>
-      <input type="text" id="new-location" placeholder="Enter city name">
+      <div class="location-input">
+        <input type="text" id="new-location" placeholder="Enter city name" oninput="showSuggestions()">
+        <span class="material-icons">search</span>
+      </div>
+      <div class="suggestions" id="suggestions">
+        <div class="suggestion-item" onclick="selectSuggestion('New York')">New York</div>
+        <div class="suggestion-item" onclick="selectSuggestion('London')">London</div>
+        <div class="suggestion-item" onclick="selectSuggestion('Tokyo')">Tokyo</div>
+        <div class="suggestion-item" onclick="selectSuggestion('Sydney')">Sydney</div>
+      </div>
       <button onclick="addLocation()">Add</button>
-      <button onclick="closeModal()">Close</button>
+      <button onclick="closeModal('add-location-modal')">Close</button>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal" id="settings-modal">
+    <div class="modal-content">
+      <h2>Settings</h2>
+      <div class="settings-item">
+        <label for="dark-mode">Dark Mode</label>
+        <label class="switch">
+          <input type="checkbox" id="dark-mode" onchange="toggleTheme()">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="settings-item">
+        <label>Version</label>
+        <p>1.0.0</p>
+      </div>
+      <div class="settings-item">
+        <label>About</label>
+        <p>Weather Mood helps you vibe with the weather!</p>
+      </div>
+      <div class="settings-item">
+        <label>Developer</label>
+        <p>Developed by AG Gaming</p>
+      </div>
+      <button onclick="closeModal('settings-modal')">Close</button>
     </div>
   </div>
 
@@ -450,18 +638,17 @@
     // Dark Mode Toggle
     function toggleTheme() {
       const body = document.body;
-      const themeIcon = document.getElementById('theme-icon');
       const isDark = body.getAttribute('data-theme') === 'dark';
       body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-      themeIcon.textContent = isDark ? 'light_mode' : 'dark_mode';
       localStorage.setItem('theme', isDark ? 'light' : 'dark');
+      document.getElementById('dark-mode').checked = !isDark;
     }
 
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.body.setAttribute('data-theme', savedTheme);
-    document.getElementById('theme-icon').textContent = savedTheme === 'dark' ? 'dark_mode' : 'light_mode';
+    document.getElementById('dark-mode').checked = savedTheme === 'dark';
 
-    // Fetch Weather Data
+    // Fetch Weather Data by City
     async function fetchWeather(location) {
       try {
         const response = await fetch(
@@ -476,6 +663,42 @@
       }
     }
 
+    // Fetch Weather Data by Coordinates
+    async function fetchWeatherByCoords(lat, lon) {
+      try {
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+        );
+        if (!response.ok) throw new Error('Fetch error');
+        const data = await response.json();
+        updateUI(data);
+        initParticles(data.weather[0].main.toLowerCase());
+      } catch (error) {
+        document.getElementById('condition').textContent = error.message;
+      }
+    }
+
+    // Use My Location
+    function getWeatherByLocation() {
+      if (!navigator.geolocation) {
+        document.getElementById('condition').textContent = 'Geolocation not supported.';
+        return;
+      }
+
+      document.getElementById('condition').textContent = 'Loading...';
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          await fetchWeatherByCoords(lat, lon);
+          locations[currentIndex] = document.getElementById('city-name').textContent;
+        },
+        (error) => {
+          document.getElementById('condition').textContent = 'Unable to retrieve location.';
+        }
+      );
+    }
+
     function updateUI(data) {
       const temp = Math.round(data.main.temp);
       const condition = data.weather[0].description;
@@ -483,22 +706,23 @@
       const weatherMain = data.weather[0].main.toLowerCase();
 
       document.getElementById('city-name').textContent = data.name;
-      document.getElementById('temperature').textContent = `${temp}°C`;
+      document.getElementById('temperature').innerHTML = `<span class="material-icons" id="weather-icon">${getWeatherIcon(weatherMain)}</span> ${temp}°C`;
       document.getElementById('condition').textContent = condition.charAt(0).toUpperCase() + condition.slice(1);
       document.getElementById('timestamp').textContent = `As of ${timestamp}`;
 
-      // Vibe Generation
+      // Enhanced Vibe Generation
       let vibe = '';
+      const timeOfDay = new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 17 ? 'Afternoon' : 'Evening';
       if (weatherMain.includes('rain') || weatherMain.includes('drizzle')) {
-        vibe = 'Rainy + Cozy = Perfect Chai Day';
+        vibe = `Rainy ${timeOfDay} + Cozy = ${timeOfDay === 'Morning' ? 'Perfect Chai Day' : 'Snuggle Up with a Book'}`;
       } else if (weatherMain === 'clear' && temp > 25) {
-        vibe = 'Sunny + Warm = Beach Picnic Vibes';
+        vibe = `Sunny ${timeOfDay} + Warm = ${timeOfDay === 'Afternoon' ? 'Beach Picnic Vibes' : 'Golden Hour Stroll'}`;
       } else if (weatherMain === 'snow') {
-        vibe = 'Snowy + Magical = Build a Snowman';
+        vibe = `Snowy ${timeOfDay} + Magical = ${timeOfDay === 'Morning' ? 'Build a Snowman' : 'Winter Lights Walk'}`;
       } else if (temp < 5) {
-        vibe = 'Cold + Crisp = Hot Cocoa Time';
+        vibe = `Cold ${timeOfDay} + Crisp = ${timeOfDay === 'Evening' ? 'Hot Cocoa Time' : 'Cozy Sweater Day'}`;
       } else {
-        vibe = 'Chill + Mild = Casual Stroll Day';
+        vibe = `Chill ${timeOfDay} + Mild = ${timeOfDay === 'Morning' ? 'Casual Stroll Day' : 'Relax Outdoors'}`;
       }
       currentWeather = `${data.name}: ${temp}°C, ${condition}`;
       currentVibe = vibe;
@@ -524,13 +748,25 @@
       `).join('');
     }
 
-    // Modal Functions
-    function openModal() {
-      document.getElementById('add-location-modal').style.display = 'flex';
+    function getWeatherIcon(condition) {
+      const iconMap = {
+        'clear': 'wb_sunny',
+        'clouds': 'cloud',
+        'rain': 'umbrella',
+        'snow': 'ac_unit',
+        'thunderstorm': 'flash_on',
+        'drizzle': 'grain'
+      };
+      return iconMap[condition] || 'weather';
     }
 
-    function closeModal() {
-      document.getElementById('add-location-modal').style.display = 'none';
+    // Modal Functions
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
     }
 
     function addLocation() {
@@ -539,9 +775,25 @@
         locations.push(newLocation);
         currentIndex = locations.length - 1;
         fetchWeather(newLocation);
-        closeModal();
+        closeModal('add-location-modal');
         updateDots();
       }
+    }
+
+    // Location Suggestions
+    function showSuggestions() {
+      const input = document.getElementById('new-location').value.toLowerCase();
+      const suggestions = document.getElementById('suggestions');
+      const items = suggestions.getElementsByClassName('suggestion-item');
+      for (let item of items) {
+        const city = item.textContent.toLowerCase();
+        item.style.display = city.includes(input) ? 'block' : 'none';
+      }
+    }
+
+    function selectSuggestion(city) {
+      document.getElementById('new-location').value = city;
+      showSuggestions();
     }
 
     // Forecast Details Toggle
@@ -591,12 +843,19 @@
     // Social Sharing
     function shareMood() {
       const text = `${currentWeather}\n${currentVibe}\nCheck out my Weather Mood!`;
-      const url = 'https://weather-mood.example.com';
+      const url = 'https://uhangman.me';
+
       if (navigator.share) {
-        navigator.share({ title: 'Weather Mood', text, url }).catch(err => console.error('Share failed:', err));
+        navigator.share({
+          title: 'Weather Mood',
+          text: text,
+          url: url
+        }).then(() => console.log('Shared successfully'))
+          .catch(err => console.error('Share failed:', err));
       } else {
-        const tweetText = encodeURIComponent(text + '\n' + url);
-        window.open(`https://twitter.com/intent/tweet?text=${tweetText}`, '_blank');
+        const tweetText = encodeURIComponent(`${text}\n${url}`);
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${tweetText}`;
+        window.open(twitterUrl, '_blank');
       }
     }
 
